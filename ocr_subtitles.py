@@ -11,9 +11,9 @@ import numpy as np
 import progressbar
 from aip import AipOcr
 
-APP_ID = '11036442'
-API_KEY = 'IfLXqO38fmLdkkUcCNHWMFiv'
-SECRET_KEY = 'LW956FOMfFLfoGn8CrKEy7X2VVCMaEAz'
+APP_ID = ''
+API_KEY = ''
+SECRET_KEY = ''
 
 CONFIG = json.load(open('config.json'))
 VIDEOS_DIR = CONFIG['videosDir']
