@@ -1,0 +1,8 @@
+__pycache__
+.vscode
+*.png
+results/*
+subtitle_images/*
+combined_images/*
+crop.py
+ocr_sogou.py
