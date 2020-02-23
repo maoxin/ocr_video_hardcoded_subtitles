@@ -1,7 +1,10 @@
 {
-  "videosDir": "videos",
-  "subtitleImgsDir": "subtitle_images",
-  "combinedImgsDir": "combined_images",
-  "resultsDir": "results",
-  "splitDuration": 1
+	"videosDir": "videos",
+	"subtitleImgsDir": "subtitle_images",
+	"combinedImgsDir": "combined_images",
+	"resultsDir": "results",
+	"splitDuration": 1,
+	"AppId": "",
+	"APIKey": "",
+	"SecretKey": ""
 }

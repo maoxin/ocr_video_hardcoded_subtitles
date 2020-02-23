@@ -11,11 +11,11 @@ import numpy as np
 import progressbar
 from aip import AipOcr
 
-APP_ID = ''
-API_KEY = ''
-SECRET_KEY = ''
-
 CONFIG = json.load(open('config.json'))
+APP_ID = CONFIG['AppId']
+API_KEY = CONFIG['APIKey']
+SECRET_KEY = CONFIG['SecretKey']
+
 VIDEOS_DIR = CONFIG['videosDir']
 SUB_IMGS_DIR = CONFIG['subtitleImgsDir']
 COMBINED_IMGS_DIR = CONFIG['combinedImgsDir']
