@@ -86,6 +86,7 @@ def combine_images(images_dir, combined_dir):
         current_img_height = current_img.shape[0]
 
         if combined_img_height + current_img_height > MAX_RECEIVE_HEIGHT:
+            combined_img = cv2.resize(combined_img, tuple(s // 4 for s in combined_img.shape[:-1])[::-1])
             cv2.imwrite(os.path.join(combined_dir, str(
                 idx).zfill(5)) + '.jpg', combined_img)
             combined_img = cv2.imread(img_path)
