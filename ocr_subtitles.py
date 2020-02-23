@@ -1,4 +1,3 @@
-# ocr 得到结果，保存到结果数组
 import difflib
 import json
 import os
@@ -33,9 +32,8 @@ def get_file_content(file_path):
 class APIError(Exception):
     pass
 
+
 # image_path -> [line_text]
-
-
 def ocr_img(file_path, method=None):
     data = get_file_content(file_path)
     try:
@@ -57,6 +55,8 @@ def ocr_img(file_path, method=None):
         return []
 
 
+# judge the same or similar lines of text
+# [line_text], text => [line_text]
 def add_unique(arr, new_item):
     if new_item in arr:
         return arr
@@ -68,6 +68,7 @@ def add_unique(arr, new_item):
         return [*arr, new_item]
 
 
+# Combine subtitle image files captured by frames to a large file up to the maximum size which the BaiduAPI can receive
 def combine_images(images_dir, combined_dir):
     MAX_RECEIVE_HEIGHT = 4096
     images = sorted(glob(os.path.join(images_dir, '*.jpg')))
@@ -94,34 +95,13 @@ def combine_images(images_dir, combined_dir):
                 [combined_img, current_img], axis=0)
 
 
-def main_simple():
-    result = []
-    images = sorted(os.listdir(sub_imgs_dir))
+def main():
 
-    try:
-        for img in images:
-            res = ocr_img(sub_imgs_dir + img)
-            if res:
-                if not result:
-                    print(res[0])
-                    result.append(res[0])
-                    continue
-                lastword = result[-1]
-                # 与上一次识别结果进行比对，若相似度过高，则放弃放入数组
-                if difflib.SequenceMatcher(None, lastword, res[0]).quick_ratio() < 0.8:
-                    print(res[0])
-                    result.append(res[0])
-    except KeyboardInterrupt:
-        pass
-    finally:
-        with open('/Users/maorui/Desktop/result.txt', 'w') as f:
-            f.write('\n'.join(result))
-
-
-def main_accurate(video_name):
+    video_name = sys.argv[1]
     result = []
     sub_imgs_path = os.path.join(SUB_IMGS_DIR, video_name)
     combined_imgs_path = os.path.join(COMBINED_IMGS_DIR, video_name)
+
     if not os.path.exists(combined_imgs_path):
         os.mkdir(combined_imgs_path)
         combine_images(sub_imgs_path, combined_imgs_path)
@@ -147,4 +127,4 @@ def main_accurate(video_name):
 
 
 if __name__ == "__main__":
-    main_accurate(sys.argv[1])
+    main()
