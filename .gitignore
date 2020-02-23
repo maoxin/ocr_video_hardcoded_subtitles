@@ -4,5 +4,6 @@ __pycache__
 results/*
 subtitle_images/*
 combined_images/*
+videos/*
 crop.py
 ocr_sogou.py

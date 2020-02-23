@@ -51,7 +51,7 @@ def get_frames(video_path, output_path, process=True):
             vc.release()
 
 
-# 目前功能：裁剪字幕区域+二值化
+# 目前功能：裁剪字幕区域+White-Top-Hat去噪+二值化
 def process_image(img_arr):
     TOP = 930
     LEFT = 285
@@ -59,9 +59,9 @@ def process_image(img_arr):
     RIGHT = 1625
 
     cropped = img_arr[TOP:BOTTOM, LEFT:RIGHT]
+    kernel = np.ones((9, 9),np.uint8)
+    cropped = cv2.morphologyEx(cropped, cv2.MORPH_TOPHAT, kernel)
     white_region = cv2.inRange(cropped, (230, 230, 230), (255, 255, 255))
-    kernel = np.ones((3, 3),np.uint8)
-    white_region = cv2.morphologyEx(white_region, cv.MORPH_TOPHAT, kernel)
     return white_region
 
 
