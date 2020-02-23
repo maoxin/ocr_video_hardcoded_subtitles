@@ -16,7 +16,7 @@ SPLIT_DURATION = CONFIG['splitDuration']
 # 读取视频截图，默认每秒抓取一次，裁剪+二值化字幕区域, 保存到指定文件夹
 def get_frames(video_path, output_path, process=True):
     vc = cv2.VideoCapture(video_path)
-    c = 1
+    c = 0
 
     if not vc.isOpened():
         print(f'Invalid Video Path: {video_path}')
@@ -28,19 +28,20 @@ def get_frames(video_path, output_path, process=True):
 
     print("-" * 36)
     print("Processing: ", os.path.split(video_path)[-1])
-    with progressbar.ProgressBar(max_value=frame_count) as bar:
+    with progressbar.ProgressBar(max_value=frame_count//timeF+1) as bar:
         try:
             while True:
+                vc.set(cv2.CAP_PROP_POS_FRAMES, c * timeF - 1)
                 rval, frame = vc.read()
                 if not rval:
                     break
-                if(c % timeF == 0):
-                    if process:
-                        frame = process_image(frame)
+                # if(c % timeF == 0):
+                if process:
+                    frame = process_image(frame)
 
-                    sub_img = os.path.join(output_path, str(
-                        c).zfill(10) + '.jpg')
-                    cv2.imwrite(sub_img, frame)
+                sub_img = os.path.join(output_path, str(
+                    c * timeF).zfill(10) + '.jpg')
+                cv2.imwrite(sub_img, frame)
 
                 bar.update(c)
                 c += 1
@@ -59,7 +60,8 @@ def process_image(img_arr):
     RIGHT = 1625
 
     cropped = img_arr[TOP:BOTTOM, LEFT:RIGHT]
-    kernel = np.ones((9, 9),np.uint8)
+    
+    kernel = np.ones((11, 11),np.uint8)
     cropped = cv2.morphologyEx(cropped, cv2.MORPH_TOPHAT, kernel)
     white_region = cv2.inRange(cropped, (230, 230, 230), (255, 255, 255))
     return white_region
