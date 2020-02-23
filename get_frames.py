@@ -44,7 +44,7 @@ def get_frames(video_path, output_path, process=True):
 
                 bar.update(c)
                 c += 1
-                # cv2.waitKey(1)
+                cv2.waitKey(1)
         except TypeError as e:
             print(e)
         finally:
