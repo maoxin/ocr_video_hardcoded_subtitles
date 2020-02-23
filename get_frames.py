@@ -5,15 +5,14 @@ import shutil
 import cv2
 import progressbar
 
-# 读取视频截图，每秒抓取一次，保存到指定文件夹
 CONFIG = json.load(open('config.json'))
 VIDEOS_DIR = CONFIG['videosDir']
 SUB_IMGS_DIR = CONFIG['subtitleImgsDir']
-COMBINED_IMGS_DIR = CONFIG['combinedImgsDir']
 RESULTS_DIR = CONFIG['resultsDir']
 SPLIT_DURATION = CONFIG['splitDuration']
 
 
+# 读取视频截图，默认每秒抓取一次，裁剪+二值化字幕区域, 保存到指定文件夹
 def get_frames(video_path, output_path, process=True):
     vc = cv2.VideoCapture(video_path)
     c = 1
@@ -51,6 +50,7 @@ def get_frames(video_path, output_path, process=True):
             vc.release()
 
 
+# 目前功能：裁剪字幕区域+二值化
 def process_image(img_arr):
     TOP = 930
     LEFT = 285
@@ -62,6 +62,7 @@ def process_image(img_arr):
     return white_region
 
 
+# 获取还未处理的视频列表
 def unprocessed_videos(videos_dir, results_dir):
     results = os.listdir(results_dir)
     videos = os.listdir(videos_dir)
@@ -76,8 +77,6 @@ def main():
     unprocessed = unprocessed_videos(VIDEOS_DIR, RESULTS_DIR)
 
     for video in unprocessed:
-        # print("-" * 36)
-        # print("Processing: ", video)
 
         video_name = os.path.splitext(video)[0]
         sub_imgs_path = (os.path.join(SUB_IMGS_DIR, video_name))
@@ -85,7 +84,6 @@ def main():
 
         if os.path.exists(sub_imgs_path):
             if os.listdir(sub_imgs_path):
-                # print("已处理， 跳过...")
                 continue
         else:
             os.mkdir(sub_imgs_path)
