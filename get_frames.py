@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 
+import numpy as np
 import cv2
 import progressbar
 
@@ -59,6 +60,8 @@ def process_image(img_arr):
 
     cropped = img_arr[TOP:BOTTOM, LEFT:RIGHT]
     white_region = cv2.inRange(cropped, (230, 230, 230), (255, 255, 255))
+    kernel = np.ones((3, 3),np.uint8)
+    white_region = cv2.morphologyEx(white_region, cv.MORPH_TOPHAT, kernel)
     return white_region
 
 
